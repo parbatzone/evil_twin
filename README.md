@@ -1,31 +1,55 @@
-## How to use it:
+# 🚀 EvilTwin Auto-Pwn
+### Automated Evil Twin Attack Script for Kali Linux
 
-Step 1 — Download/copy the script to your Kali
-Save it anywhere, example:
-bashcp eviltwin_auto.py ~/eviltwin_auto.py
-Step 2 — Give it execute permission
-bashchmod +x ~/eviltwin_auto.py
-Step 3 — Plug in your LB-LINK USB adapter (wlan1 must show in iwconfig)
-Step 4 — Run it as root
-bashsudo python3 ~/eviltwin_auto.py
+A streamlined Python script designed to automate the deployment of a Rogue Access Point. It handles interface configuration, process management, and deauthentication with minimal user input.
 
-What It Does Automatically
+---
 
-Kills interfering processes (wpa_supplicant etc)
-Detects your 2 interfaces — assigns wlan1 as monitor, wlan0 as fake AP
-Starts airodump scan — you see all networks live
-You press Ctrl+C when you spot your target
-You enter SSID, BSSID, channel — 3 inputs only
-Launches everything automatically:
+## 🛠️ Requirements
+* **OS:** Kali Linux / Parrot OS
+* **Hardware:** LB-LINK USB Adapter (or any adapter supporting monitor mode)
+* **Interfaces:** `wlan1` (Monitor) and `wlan0` (Fake AP)
 
-Fake AP with same SSID as your router
-DHCP server on 192.168.1.1
-Infinite deauth blocking the real router
+---
 
+## 📖 How to Use
 
-Press Ctrl+C to stop — it cleans everything up and restores internet
+### Step 1: Deploy the Script
+Save the script to your home directory: <br>
+`cp eviltwin_auto.py ~/eviltwin_auto.py`
 
+**Step 2: Set Permissions** <br>
+Ensure the script is executable: <br>
+`chmod +x ~/eviltwin_auto.py`
 
-If hostapd fails
-bashsudo systemctl stop hostapd
+**Step 3: Hardware Check** <br>
+Plug in your USB adapter and verify that `wlan1` is visible: <br>
+`iwconfig`
+
+**Step 4: Launch** <br>
+Run the script with root privileges: <br>
+`sudo python3 ~/eviltwin_auto.py`
+
+---
+
+## ⚡ Automated Features
+The script simplifies the entire attack chain into a few automated steps:
+
+* **Environment Cleanup:** Automatically kills interfering processes like `wpa_supplicant`.
+* **Dual-Interface Setup:** Assigns `wlan1` to monitor mode and `wlan0` as the Fake AP.
+* **Target Acquisition:** Launches an `airodump-ng` scan. Once you find your target, press `Ctrl+C` to move to configuration.
+* **Quick Input:** Requires only 3 inputs: **SSID**, **BSSID**, and **Channel**.
+* **Full Stack Deployment:**
+    * Spawns a Fake AP with the target SSID.
+    * Configures a DHCP server on `192.168.1.1`.
+    * Initiates an infinite deauthentication loop to kick users off the legitimate router.
+* **Auto-Restore:** Press `Ctrl+C` at any time to stop the attack, clean up processes, and restore network settings.
+
+---
+
+## 🛠️ Troubleshooting
+If `hostapd` fails to start correctly, run the following commands to reset the service:
+
+```bash
+sudo systemctl stop hostapd
 sudo python3 ~/eviltwin_auto.py
